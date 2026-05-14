@@ -2,22 +2,72 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>学习笔记 - 首页</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习笔记</title>
+  <!-- 引入样式：干净、现代、卡片式 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .note-card:hover {
+      transform: translateY(-4px);
+    }
+  </style>
 </head>
-<body>
-  <div class="container">
-    <h1>学习笔记</h1>
-    <p>这是我的在线学习笔记，随时查看，随时更新</p>
+<body class="bg-gray-50 min-h-screen">
 
-    <div class="menu">
-      <h2>MySQL 笔记</h2>
-      <ul>
-        <li><a href="./mysql/install.html">MySQL 安装教程（CentOS 9）</a></li>
-        <!-- 以后你在这里加新笔记链接 -->
-        <!-- <li><a href="mysql/other.html">其他MySQL笔记</a></li> -->
-      </ul>
-    </div>
+<div class="max-w-5xl mx-auto px-4 py-10">
+  <!-- 标题 -->
+  <div class="text-center mb-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">📝 学习笔记</h1>
+    <p class="text-gray-500">积累技术，持续成长</p>
   </div>
+
+  <!-- ======================
+       笔记列表（只需在这里加卡片，自动展示）
+       以后新增笔记 = 复制下面一个卡片
+  ====================== -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- ========== 笔记 1 ========== -->
+    <a href="./mysql/install.html" class="note-block">
+      <div class="note-card bg-white rounded-xl p-6 shadow hover:shadow-md transition-all border border-gray-100">
+        <div class="flex items-center gap-3 mb-3">
+          <i class="fa-solid fa-database text-blue-500 text-xl"></i>
+          <h2 class="font-semibold text-gray-800">MySQL 安装</h2>
+        </div>
+        <p class="text-gray-500 text-sm">MySQL 环境搭建与配置笔记</p>
+      </div>
+    </a>
+
+    <!-- <!-- ========== 笔记 2（示例） ========== -->
+    <a href="java/install.html" class="note-block">
+      <div class="note-card bg-white rounded-xl p-6 shadow hover:shadow-md transition-all border border-gray-100">
+        <div class="flex items-center gap-3 mb-3">
+          <i class="fa-brands fa-java text-red-500 text-xl"></i>
+          <h2 class="font-semibold text-gray-800">Java 环境安装</h2>
+        </div>
+        <p class="text-gray-500 text-sm">JDK 安装与环境变量配置</p>
+      </div>
+    </a>
+
+    <!-- ========== 笔记 3（示例） ========== -->
+    <a href="springboot/start.html" class="note-block">
+      <div class="note-card bg-white rounded-xl p-6 shadow hover:shadow-md transition-all border border-gray-100">
+        <div class="flex items-center gap-3 mb-3">
+          <i class="fa-solid fa-leaf text-green-500 text-xl"></i>
+          <h2 class="font-semibold text-gray-800">Spring Boot 入门</h2>
+        </div>
+        <p class="text-gray-500 text-sm">Spring Boot 基础搭建与配置</p>
+      </div>
+    </a> -->
+
+
+    <!-- ========== 以后新增笔记，只需要在这里复制粘贴 ========== -->
+
+
+
+  </div>
+</div>
+
 </body>
 </html>
