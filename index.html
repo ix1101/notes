@@ -4,18 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>学习笔记</title>
-  <!-- 引入样式：干净、现代、卡片式 -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .note-card:hover {
-      transform: translateY(-4px);
-    }
-  </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-<div class="max-w-5xl mx-auto px-4 py-10">
+<div class="max-w-4xl mx-auto px-4 py-10">
   <!-- 标题 -->
   <div class="text-center mb-10">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">📝 学习笔记</h1>
@@ -23,51 +17,90 @@
   </div>
 
   <!-- ======================
-       笔记列表（只需在这里加卡片，自动展示）
-       以后新增笔记 = 复制下面一个卡片
+       可折叠笔记分类（超级好扩展）
   ====================== -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="space-y-4">
 
-    <!-- ========== 笔记 1 ========== -->
-    <a href="./mysql/install.html" class="note-block">
-      <div class="note-card bg-white rounded-xl p-6 shadow hover:shadow-md transition-all border border-gray-100">
-        <div class="flex items-center gap-3 mb-3">
+    <!-- ======================
+      【分类 1：MySQL】
+      点一下展开 → 显示所有 MySQL 笔记
+    ====================== -->
+    <div class="note-category">
+      <!-- 分类卡片（点击展开/关闭） -->
+      <div class="category-toggle cursor-pointer bg-white rounded-xl p-6 shadow border border-gray-100 flex justify-between items-center">
+        <div class="flex items-center gap-3">
           <i class="fa-solid fa-database text-blue-500 text-xl"></i>
-          <h2 class="font-semibold text-gray-800">MySQL 安装</h2>
+          <h2 class="font-semibold text-gray-800">MySQL</h2>
         </div>
-        <p class="text-gray-500 text-sm">MySQL 环境搭建与配置笔记</p>
+        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
       </div>
-    </a>
 
-    <!-- <!-- ========== 笔记 2（示例） ========== -->
-    <a href="java/install.html" class="note-block">
-      <div class="note-card bg-white rounded-xl p-6 shadow hover:shadow-md transition-all border border-gray-100">
-        <div class="flex items-center gap-3 mb-3">
-          <i class="fa-brands fa-java text-red-500 text-xl"></i>
-          <h2 class="font-semibold text-gray-800">Java 环境安装</h2>
-        </div>
-        <p class="text-gray-500 text-sm">JDK 安装与环境变量配置</p>
+      <!-- 笔记列表（默认隐藏，点击展开） -->
+      <div class="category-content hidden mt-2 ml-8 space-y-2">
+        <a href="./mysql/install.html" class="block p-3 bg-white rounded-lg hover:bg-blue-50 transition">
+          <i class="fa-solid fa-file-lines text-blue-400 mr-2"></i>MySQL 安装
+        </a>
+        
+        <!-- 以后加 MySQL 笔记，只需要在这里加一行 -->
+        
       </div>
-    </a>
+    </div>
 
-    <!-- ========== 笔记 3（示例） ========== -->
-    <a href="springboot/start.html" class="note-block">
-      <div class="note-card bg-white rounded-xl p-6 shadow hover:shadow-md transition-all border border-gray-100">
-        <div class="flex items-center gap-3 mb-3">
+    <!-- ======================
+      【分类 2：Spring Boot】（示例）
+    ====================== -->
+    <!-- <div class="note-category">
+      <div class="category-toggle cursor-pointer bg-white rounded-xl p-6 shadow border border-gray-100 flex justify-between items-center">
+        <div class="flex items-center gap-3">
           <i class="fa-solid fa-leaf text-green-500 text-xl"></i>
-          <h2 class="font-semibold text-gray-800">Spring Boot 入门</h2>
+          <h2 class="font-semibold text-gray-800">Spring Boot</h2>
         </div>
-        <p class="text-gray-500 text-sm">Spring Boot 基础搭建与配置</p>
+        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
       </div>
-    </a> -->
+      <div class="category-content hidden mt-2 ml-8 space-y-2">
+        <a href="./springboot/start.html" class="block p-3 bg-white rounded-lg hover:bg-green-50 transition">
+          <i class="fa-solid fa-file-lines text-green-400 mr-2"></i>Spring Boot 入门
+        </a>
+      </div>
+    </div> -->
 
+    <!-- ======================
+      【分类 3：Java】（示例）
+    ====================== -->
+    <!-- <div class="note-category">
+      <div class="category-toggle cursor-pointer bg-white rounded-xl p-6 shadow border border-gray-100 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <i class="fa-brands fa-java text-red-500 text-xl"></i>
+          <h2 class="font-semibold text-gray-800">Java</h2>
+        </div>
+        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
+      </div>
+      <div class="category-content hidden mt-2 ml-8 space-y-2">
+        <a href="./java/install.html" class="block p-3 bg-white rounded-lg hover:bg-red-50 transition">
+          <i class="fa-solid fa-file-lines text-red-400 mr-2"></i>JDK 安装
+        </a>
+      </div>
+    </div> -->
 
-    <!-- ========== 以后新增笔记，只需要在这里复制粘贴 ========== -->
-
-
+    <!-- ======================
+      以后新增【分类】，只需要复制上面一整个模块
+    ====================== -->
 
   </div>
 </div>
+
+<script>
+  // 原生 JS 实现折叠展开（极简、稳定）
+  document.querySelectorAll('.category-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const content = toggle.nextElementSibling;
+      const arrow = toggle.querySelector('.fa-chevron-down');
+      
+      content.classList.toggle('hidden');
+      arrow.classList.toggle('rotate-180');
+    });
+  });
+</script>
 
 </body>
 </html>
