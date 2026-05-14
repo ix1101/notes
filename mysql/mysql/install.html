@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CentOS 9 安装 MySQL 8 完整教程</title>
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入 Font Awesome 图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- 自定义 Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            secondary: '#10b981',
+            dark: '#1e293b',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .code-block {
+        @apply bg-gray-900 text-gray-100 rounded-lg p-4 my-4 overflow-x-auto font-mono text-sm relative;
+      }
+      .copy-btn {
+        @apply absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs transition-colors;
+      }
+      .step-card {
+        @apply bg-white dark:bg-dark rounded-xl shadow-md p-6 mb-6 transition-all hover:shadow-lg;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors">
+  <!-- 顶部导航栏 -->
+  <nav class="sticky top-0 bg-white/90 dark:bg-dark/90 backdrop-blur-sm shadow-sm z-50">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="../index.html" class="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回首页</span>
+      </a>
+      <h1 class="text-xl font-bold">CentOS 9 安装 MySQL 8</h1>
+      <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 步骤导航 -->
+  <div class="max-w-5xl mx-auto px-4 py-6">
+    <div class="flex flex-wrap gap-2 mb-8 justify-center">
+      <a href="#step1" class="step-nav px-4 py-2 rounded-full bg-primary text-white">1. 卸载 MariaDB</a>
+      <a href="#step2" class="step-nav px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">2. 安装官方源</a>
+      <a href="#step3" class="step-nav px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">3. 安装 MySQL</a>
+      <a href="#step4" class="step-nav px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">4. 启动服务</a>
+      <a href="#step5" class="step-nav px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">5. 获取密码</a>
+      <a href="#step6" class="step-nav px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">6. 修改密码</a>
+    </div>
+
+    <!-- 步骤 1 -->
+    <div id="step1" class="step-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+        <h2 class="text-2xl font-bold">卸载系统自带的 MariaDB</h2>
+      </div>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">CentOS 9 默认自带 MariaDB，会和 MySQL 产生冲突，必须先卸载干净。</p>
+      
+      <div class="code-block">
+        <button class="copy-btn" data-target="code1">复制</button>
+        <pre id="code1"># 检查是否安装了 MariaDB
+rpm -qa | grep mariadb
+
+# 卸载所有 MariaDB 相关包
+sudo dnf remove -y mariadb-libs</pre>
+      </div>
+    </div>
+
+    <!-- 步骤 2 -->
+    <div id="step2" class="step-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
+        <h2 class="text-2xl font-bold">安装 MySQL 官方 Yum 源</h2>
+      </div>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">添加 MySQL 官方软件源，这样才能安装到最新的 MySQL 8 版本。</p>
+      
+      <div class="code-block">
+        <button class="copy-btn" data-target="code2">复制</button>
+        <pre id="code2"># 下载并安装 MySQL 8 官方源
+sudo dnf install -y https://dev.mysql.com/get/mysql80-community-release-el9-4.noarch.rpm
+
+# 导入 GPG 密钥（解决安装时的签名验证问题）
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2023
+
+# 禁用 Google Chrome 源（解决国内访问报错问题）
+sudo dnf config-manager --set-disabled google-chrome</pre>
+      </div>
+    </div>
+
+    <!-- 步骤 3 -->
+    <div id="step3" class="step-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">3</div>
+        <h2 class="text-2xl font-bold">安装 MySQL 服务端</h2>
+      </div>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">安装 MySQL 社区版服务端，这是核心程序。</p>
+      
+      <div class="code-block">
+        <button class="copy-btn" data-target="code3">复制</button>
+        <pre id="code3">sudo dnf install -y mysql-community-server</pre>
+      </div>
+    </div>
+
+    <!-- 步骤 4 -->
+    <div id="step4" class="step-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">4</div>
+        <h2 class="text-2xl font-bold">启动服务并设置开机自启</h2>
+      </div>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">启动 MySQL 服务，并设置为开机自动启动，这样服务器重启后 MySQL 也会自动运行。</p>
+      
+      <div class="code-block">
+        <button class="copy-btn" data-target="code4">复制</button>
+        <pre id="code4"># 启动 MySQL 服务
+sudo systemctl start mysqld
+
+# 设置开机自启
+sudo systemctl enable mysqld
+
+# 检查服务状态（显示 active (running) 即为成功）
+sudo systemctl status mysqld</pre>
+      </div>
+    </div>
+
+    <!-- 步骤 5 -->
+    <div id="step5" class="step-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">5</div>
+        <h2 class="text-2xl font-bold">获取初始 root 密码</h2>
+      </div>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">MySQL 第一次启动时会自动生成一个临时的 root 密码，保存在日志文件中。</p>
+      
+      <div class="code-block">
+        <button class="copy-btn" data-target="code5">复制</button>
+        <pre id="code5">sudo grep 'temporary password' /var/log/mysqld.log</pre>
+      </div>
+      
+      <div class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 p-4 rounded-r-lg mt-4">
+        <p class="text-yellow-800 dark:text-yellow-200">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          输出结果中最后面的一串字符就是临时密码，例如：<code>tiM@t1gp2rE</code>
+        </p>
+      </div>
+    </div>
+
+    <!-- 步骤 6 -->
+    <div id="step6" class="step-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">6</div>
+        <h2 class="text-2xl font-bold">登录并修改 root 密码</h2>
+      </div>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">使用临时密码登录 MySQL，然后修改为你自己的密码。</p>
+      
+      <div class="code-block">
+        <button class="copy-btn" data-target="code6">复制</button>
+        <pre id="code6"># 使用临时密码登录（把下面的临时密码换成你自己的）
+mysql -uroot -p'你的临时密码'
+
+# 修改 root 密码（必须包含大小写字母、数字和特殊符号）
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Root@123456';
+
+# 刷新权限
+FLUSH PRIVILEGES;
+
+# 退出 MySQL
+EXIT;</pre>
+      </div>
+      
+      <div class="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-400 p-4 rounded-r-lg mt-4">
+        <p class="text-green-800 dark:text-green-200">
+          <i class="fas fa-check-circle mr-2"></i>
+          恭喜！MySQL 8 已经成功安装在你的 CentOS 9 系统上了！
+        </p>
+      </div>
+    </div>
+
+    <!-- 底部 -->
+    <footer class="text-center py-8 text-gray-500 dark:text-gray-400">
+      <p>最后更新：2026年5月14日</p>
+    </footer>
+  </div>
+
+  <!-- 返回顶部按钮 -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-primary text-white shadow-lg flex items-center justify-center opacity-0 invisible transition-all hover:bg-primary/90">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript 交互 -->
+  <script>
+    // 深色模式切换
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // 检查本地存储的主题设置
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // 代码一键复制
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const code = document.getElementById(targetId).textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = '已复制!';
+          btn.classList.add('bg-green-600');
+          
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('bg-green-600');
+          }, 2000);
+        });
+      });
+    });
+
+    // 返回顶部按钮
+    const backToTop = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.remove('opacity-0', 'invisible');
+        backToTop.classList.add('opacity-100', 'visible');
+      } else {
+        backToTop.classList.add('opacity-0', 'invisible');
+        backToTop.classList.remove('opacity-100', 'visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // 步骤导航高亮
+    const steps = document.querySelectorAll('[id^="step"]');
+    const stepNavs = document.querySelectorAll('.step-nav');
+    
+    window.addEventListener('scroll', () => {
+      let currentStep = 0;
+      
+      steps.forEach((step, index) => {
+        const stepTop = step.offsetTop - 100;
+        if (window.scrollY >= stepTop) {
+          currentStep = index;
+        }
+      });
+      
+      stepNavs.forEach((nav, index) => {
+        if (index === currentStep) {
+          nav.classList.add('bg-primary', 'text-white');
+          nav.classList.remove('bg-gray-200', 'dark:bg-gray-700');
+        } else {
+          nav.classList.remove('bg-primary', 'text-white');
+          nav.classList.add('bg-gray-200', 'dark:bg-gray-700');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
